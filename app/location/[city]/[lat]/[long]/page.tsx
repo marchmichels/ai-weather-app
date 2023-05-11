@@ -8,6 +8,8 @@ import TempChart from "@/components/TempChart";
 import fetchWeatherQuery from "@/graphql/queries/fetchWeatherQueries";
 import getBasePath from "@/lib/getBasePath";
 import cleanData from "@/lib/cleanData";
+//import { find, setCache } from "geo-tz";
+
 
 // revalidate cache every day
 export const revalidate = 86400;
@@ -24,13 +26,20 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
 
     const client = getClient();
 
+    // Attempt to set timezone from lat/long
+
+    // setCache({ preload: true });
+    // //const { find } = require('geo-tz');
+    // let timezone = find(Number(lat), Number(long));
+    // console.log(timezone);
+
     const { data } = await client.query({
         query: fetchWeatherQuery,
         variables: {
             current_weather: "true",
             longitude: long,
             latitude: lat,
-            timezone: 'EST'
+            timezone: "EST",
         }
     })
 
@@ -40,28 +49,26 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
 
     const dataToSend = cleanData(results, city);
 
-    // const res = await fetch(`${getBasePath()}/api/getWeatherSummary`, {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //         weatherData: dataToSend
-    //     })
-    // });
+    const res = await fetch(`${getBasePath()}/api/getWeatherSummary`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            weatherData: dataToSend
+        })
+    });
 
-    // const GPTdata = await res.json();
-    // const { content } = GPTdata;
-
-   // console.log(results.current_weather.time)
+    const GPTdata = await res.json();
+    const { content } = GPTdata;
 
     return (
         <div className="flex flex-col min-h-screen md:flex-row">
-            <InformationPanel 
-            city={city} 
-            long={long}
-            lat={lat}
-            results={results} 
+            <InformationPanel
+                city={city}
+                long={long}
+                lat={lat}
+                results={results}
             />
             <div className="flex-1 p-5 lg:p-10">
                 <div className="p-5">
@@ -77,7 +84,7 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
 
                     <div className="m-2 mb-10">
                         <Calloutcard
-                            message="GPT disabled for testing. Replace string with variable 'content' to enable."
+                            message={content}
                         />
                     </div>
 
