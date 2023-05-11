@@ -6,14 +6,19 @@ import RainChart from "@/components/RainChart";
 import StatCard from "@/components/StatCard";
 import TempChart from "@/components/TempChart";
 import fetchWeatherQuery from "@/graphql/queries/fetchWeatherQueries";
+import getBasePath from "@/lib/getBasePath";
+import cleanData from "@/lib/cleanData";
+
+// revalidate cache every day
+export const revalidate = 86400;
 
 type Props = {
     params: {
         city: string;
         lat: string;
         long: string;
-    }
-}
+    };
+};
 
 async function WeatherPage({ params: { city, lat, long } }: Props) {
 
@@ -25,13 +30,30 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
             current_weather: "true",
             longitude: long,
             latitude: lat,
-            timezone: 'GMT'
+            timezone: 'EST'
         }
     })
 
+
     const results: Root = data.myQuery;
 
-    //console.log(results);
+
+    const dataToSend = cleanData(results, city);
+
+    // const res = await fetch(`${getBasePath()}/api/getWeatherSummary`, {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //         weatherData: dataToSend
+    //     })
+    // });
+
+    // const GPTdata = await res.json();
+    // const { content } = GPTdata;
+
+   // console.log(results.current_weather.time)
 
     return (
         <div className="flex flex-col min-h-screen md:flex-row">
@@ -48,13 +70,14 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
                         <p className="text-sm text-gray-400">
                             Last Updated at: {" "}
                             {new Date(results.current_weather.time).toLocaleString()}
+                            {" "}
                             {results.timezone}
                         </p>
                     </div>
 
                     <div className="m-2 mb-10">
                         <Calloutcard
-                            message="This is where GPT Summary will go!"
+                            message="GPT disabled for testing. Replace string with variable 'content' to enable."
                         />
                     </div>
 

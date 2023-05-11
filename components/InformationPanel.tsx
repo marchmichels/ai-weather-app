@@ -12,6 +12,7 @@ type Props = {
 }
 
 function InformationPanel({ city, lat, long, results }: Props) {
+
     return (
         <div className="bg-gradient-to-br from-[#394F68] to-[#183B7E] text-white p-10">
             <div className="pb-5">
@@ -25,7 +26,7 @@ function InformationPanel({ city, lat, long, results }: Props) {
             <div className="mt-5 flex items-center justify-between space-x-10 mb-5">
                 <div>
                     <p className="text-xl">
-                        {new Date().toLocaleDateString("en-GB", {
+                        {new Date().toLocaleDateString("en-US", {
                             weekday: "long",
                             year: "numeric",
                             month: "long",
@@ -39,7 +40,7 @@ function InformationPanel({ city, lat, long, results }: Props) {
                 </div>
 
                 <p className="text-xl font-bold uppercase">
-                    {new Date().toLocaleTimeString("en-GB", {
+                    {new Date().toLocaleTimeString("en-US", {
                         hour: "numeric",
                         minute: "numeric",
                         hour12: true,
@@ -71,7 +72,7 @@ function InformationPanel({ city, lat, long, results }: Props) {
                     <div className="flex-1 flex justify-between items-center">
                         <p className="font-extralight">Sunrise</p>
                         <p className="uppercase text-2xl">
-                            {new Date(results.daily.sunrise[0]).toLocaleTimeString("en-GB", {
+                            {new Date(results.daily.sunrise[0]).toLocaleTimeString("en-US", {
                                 hour: "numeric",
                                 minute: "numeric",
                                 hour12: true,
@@ -85,7 +86,7 @@ function InformationPanel({ city, lat, long, results }: Props) {
                     <div className="flex-1 flex justify-between items-center">
                         <p className="font-extralight">Sunset</p>
                         <p className="uppercase text-2xl">
-                            {new Date(results.daily.sunset[0]).toLocaleTimeString("en-GB", {
+                            {new Date(results.daily.sunset[0]).toLocaleTimeString("en-US", {
                                 hour: "numeric",
                                 minute: "numeric",
                                 hour12: true,
