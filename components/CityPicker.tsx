@@ -93,8 +93,6 @@ function CityPicker() {
                 </div>
             )}
 
-
-
         </div>
     );
 }
